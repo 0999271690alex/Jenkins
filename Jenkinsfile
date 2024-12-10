@@ -24,4 +24,19 @@ pipeline {
                 }
             }
         }
+        stage('Check Logs') {
+            steps {
+                script {
+                    sh '''
+                        LOG_FILE="/var/log/apache2/access.log"
+                        if [ ! -f "$LOG_FILE" ]; then
+                            LOG_FILE="/var/log/httpd/access_log"
+                        fi
+                        echo "Перевірка помилок у логах (4xx і 5xx):"
+                        grep -E "HTTP/[0-9.]+\" [45][0-9][0-9]" $LOG_FILE || echo "Помилок не знайдено."
+                    '''
+                }
+            }
+        }
     }
+}
