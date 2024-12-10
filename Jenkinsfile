@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Клонування репозиторію') {
             steps {
-                git 'https://github.com/your-repo/jenkins-pipeline.git' // Змініть на ваш репозиторій
+                git 'https://github.com/0999271690alex/Jenkins' 
             }
         }
         stage('Встановлення Apache') {
