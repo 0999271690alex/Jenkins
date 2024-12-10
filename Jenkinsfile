@@ -1,7 +1,12 @@
 pipeline {
     agent any
     stages {
-        stage('Install Apache') {
+        stage('Клонування репозиторію') {
+            steps {
+                git 'https://github.com/your-repo/jenkins-pipeline.git' // Змініть на ваш репозиторій
+            }
+        }
+        stage('Встановлення Apache') {
             steps {
                 sh '''
                 if [ -x "$(command -v apt)" ]; then
@@ -12,6 +17,11 @@ pipeline {
                     sudo systemctl start httpd
                 fi
                 '''
+            }
+        }
+        stage('Аналіз логів') {
+            steps {
+                sh 'bash log_analyzer.sh'
             }
         }
     }
