@@ -1,28 +1,27 @@
 pipeline {
     agent any
     stages {
-        stage('Клонування репозиторію') {
+        stage('Checkout') {
             steps {
-                git 'https://github.com/0999271690alex/Jenkins' 
+                // Клонування репозиторію
+                git 'https://github.com/0999271690alex/Jenkins'
             }
         }
-        stage('Встановлення Apache') {
+        stage('Install Apache') {
             steps {
-                sh '''
-                if [ -x "$(command -v apt)" ]; then
-                    sudo apt update
-                    sudo apt install -y apache2
-                elif [ -x "$(command -v yum)" ]; then
-                    sudo yum install -y httpd
-                    sudo systemctl start httpd
-                fi
-                '''
-            }
-        }
-        stage('Аналіз логів') {
-            steps {
-                sh 'bash log_analyzer.sh'
+                script {
+                    if (isUnix()) {
+                        // Для Linux
+                        sh '''
+                            sudo apt update || sudo yum update -y
+                            sudo apt install -y apache2 || sudo yum install -y httpd
+                            sudo systemctl start apache2 || sudo systemctl start httpd
+                            sudo systemctl enable apache2 || sudo systemctl enable httpd
+                        '''
+                    } else {
+                        error 'Операційна система не підтримується.'
+                    }
+                }
             }
         }
     }
-}
