@@ -3,8 +3,8 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Клонування репозиторію
-                git 'https://github.com/0999271690alex/Jenkins.git'
+                // Клонування репозиторію з використанням credentialsId
+                git url: 'https://github.com/0999271690alex/Jenkins.git', branch: 'main', credentialsId: '83a53929-f167-45d9-9c91-209c26803109'
             }
         }
         stage('Install Apache2') {
